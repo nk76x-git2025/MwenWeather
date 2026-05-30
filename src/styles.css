@@ -3,24 +3,120 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --background: #FFFDF8;
+  --surface: #FFFFFF;
+  --surface-muted: #F6F3EA;
+  --foreground: #111827;
+  --muted-foreground: #6B7280;
+  --primary: #2563EB;
+  --primary-soft: #DBEAFE;
+  --accent: #F59E0B;
+  --accent-soft: #FEF3C7;
+  --border: #E5E7EB;
+  --danger: #DC2626;
+  --success: #10B981;
+
+  --temp-freezing: #60A5FA;
+  --temp-cold: #3B82F6;
+  --temp-cool: #06B6D4;
+  --temp-mild: #10B981;
+  --temp-warm: #F59E0B;
+  --temp-hot: #F97316;
+  --temp-very-hot: #DC2626;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  background: var(--background);
+}
+
 body {
   margin: 0;
   min-width: 320px;
+  background: var(--background);
 }
 
 button,
 input,
 textarea {
   font: inherit;
+}
+
+button,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+label:has(input:focus-visible) {
+  outline: 3px solid color-mix(in srgb, var(--primary) 55%, white);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .card {
+    @apply rounded-[2rem] border bg-[color:var(--surface)];
+    border-color: var(--border);
+    box-shadow: 0 18px 50px rgba(17, 24, 39, 0.08);
+  }
+
+  .chip {
+    @apply inline-flex items-center justify-center rounded-full px-3 py-2 text-sm font-bold;
+  }
+
+  .eyebrow {
+    @apply text-xs font-black uppercase tracking-[0.24em];
+  }
+
+  .metric-card {
+    @apply rounded-[1.35rem] bg-[color:var(--surface-muted)] p-3;
+  }
+
+  .metric-card dt {
+    @apply text-xs font-bold text-[color:var(--muted-foreground)];
+  }
+
+  .metric-card dd {
+    @apply mt-1 text-xl font-black text-[color:var(--foreground)];
+  }
+
+  .field-label {
+    @apply block text-base font-black text-[color:var(--foreground)];
+  }
+
+  .text-field {
+    @apply mt-3 min-h-14 w-full rounded-3xl border bg-white px-4 py-4 text-base leading-6 text-[color:var(--foreground)] shadow-inner;
+    border-color: var(--border);
+  }
+
+  .text-field::placeholder {
+    color: #9ca3af;
+  }
+
+  .primary-button {
+    @apply flex min-h-14 w-full items-center justify-center rounded-3xl bg-[color:var(--primary)] px-5 py-4 text-center text-base font-black text-white shadow-[0_16px_30px_rgba(37,99,235,0.24)] transition active:scale-[0.99];
+  }
+
+  .secondary-button {
+    @apply flex min-h-12 w-full items-center justify-center rounded-3xl bg-[color:var(--accent-soft)] px-4 py-3 text-center font-black text-[color:var(--foreground)] transition active:scale-[0.99];
+  }
+
+  .shadow-soft {
+    box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
+  }
+
+  .shadow-warm {
+    box-shadow: 0 24px 70px rgba(245, 158, 11, 0.16), 0 18px 50px rgba(37, 99, 235, 0.08);
+  }
 }
