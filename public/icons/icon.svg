@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">MwenWeather icon</title>
+  <desc id="desc">A moon, cloud, and journal mark on a dark blue background.</desc>
+  <rect width="512" height="512" rx="112" fill="#020617"/>
+  <circle cx="170" cy="158" r="62" fill="#38bdf8" opacity="0.92"/>
+  <circle cx="198" cy="132" r="58" fill="#020617"/>
+  <path d="M133 293c0-45 37-82 82-82 31 0 59 18 73 45 12-8 27-13 43-13 42 0 76 34 76 76s-34 76-76 76H159c-43 0-78-35-78-78 0-33 21-62 52-74Z" fill="#e0f2fe"/>
+  <path d="M166 320h179" stroke="#0f172a" stroke-width="24" stroke-linecap="round"/>
+  <path d="M166 366h122" stroke="#0f172a" stroke-width="24" stroke-linecap="round"/>
+</svg>
