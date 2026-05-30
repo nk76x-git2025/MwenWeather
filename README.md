@@ -1,123 +1,109 @@
 # MwenWeather
 
-MwenWeather is a personal weather memory journal. It is intended to show current weather, let the user log how the weather actually felt, what they wore, and what they wish they had worn or brought. Over time, recommendations should come from the user's own past logs instead of generic weather advice.
-
-Core loop:
+MwenWeather is a personal, local-first weather memory journal. The core loop is:
 
 ```text
 current weather → personal outfit/feeling log → history → explainable recommendation
 ```
 
-## Current repository state
+This MVP is a frontend-only Vite + React + TypeScript app with Tailwind CSS, a conservative PWA baseline, mock current weather, local IndexedDB logs, and JSON export/import.
 
-This repository is currently in planning/setup state only.
+## What is included
 
-Inspected on this planning pass:
+- Mobile-first, dark-mode-first app shell.
+- Current weather screen backed by a mock provider that is easy to replace later.
+- New outfit/weather memory form that stores a permanent weather snapshot inside each log.
+- Local IndexedDB storage in the browser; no backend, login, cloud sync, or database server.
+- History screen for saved logs.
+- Simple explainable recommendation screen using past logs as evidence.
+- Settings/data screen with JSON export and import.
+- PWA manifest named `MwenWeather` with standalone display.
+- Conservative service worker that caches only the initial app shell assets.
+- Node acceptance tests for the manifest and service worker behavior.
 
-- No `package.json` is present yet.
-- No app framework or build setup is present yet.
-- No `src/` folder or application code is present yet.
-- No existing README was present before this planning pass.
-- No existing style files are present yet.
-- No existing PWA manifest or service worker files are present yet.
-- No lint, build, or test commands are configured yet.
-- No TypeScript configuration is present yet.
-- No Tailwind configuration is present yet.
-- A repository-level `AGENTS.md` has now been added for project working rules.
+## Data safety
 
-## Intended MVP stack
+Logs are stored only in the current browser profile's IndexedDB. Export a JSON backup before clearing browser data, changing devices, or testing import. Import replaces local logs with the selected backup file.
 
-Use this stack unless a future PR documents a strong reason to change it:
+## Weather provider
 
-- **Vite** for the frontend build tool and development server.
-- **React** for the UI.
-- **TypeScript** for app logic and typed data shapes.
-- **Tailwind CSS** for mobile-first styling.
-- **IndexedDB** for local-first personal log storage.
-- **PWA manifest + conservative service worker** for installability and basic app-shell resilience.
+The first version intentionally uses mock weather data and commits no API keys. A future browser-safe provider can be selected with environment configuration. Copy `.env.example` to `.env.local` only when a real provider is added, and never commit real keys.
 
-MwenWeather v1 should remain frontend-only and local-first. Do not add login, cloud sync, a backend, a database server, or server-side API proxy unless explicitly requested.
+## Development commands
 
-## Programming languages and file types
+```bash
+npm install
+npm run dev
+npm run dev -- --host 0.0.0.0
+npm test
+npm run build
+```
 
-Preferred for v1:
+## Raspberry Pi testing guide
 
-- **TypeScript (`.ts`)** for app logic, storage, data models, and utilities.
-- **TSX (`.tsx`)** for React components.
-- **CSS (`.css`)** only for global styles and Tailwind setup.
-- **HTML (`index.html`)** only for the Vite entry point unless there is a strong reason otherwise.
-- **JSON (`.json`)** for the PWA manifest, sample data, config, and export/import data shapes.
-- **Markdown (`.md`)** for README and project documentation.
-- **Bash/shell** only in documentation or scripts when needed.
+From the Raspberry Pi, clone or open the repository and run:
 
-Avoid for v1 unless explicitly requested:
+```bash
+npm install
+npm run dev -- --host 0.0.0.0
+```
 
-- Python backend
-- Django
-- Flask
-- Express backend
-- Database server
-- Authentication framework
-- Cloud sync service
-- Server-side API proxy
-- Docker setup if the repo does not already use Docker
+Find the Pi's local IP address:
 
-## Planned PR roadmap
+```bash
+hostname -I
+```
 
-### PR 1 — App scaffold + mobile shell
+From your computer or phone on the same Wi-Fi network, open:
 
-Create the Vite + React + TypeScript app scaffold. Add Tailwind CSS, a dark-mode-first mobile shell, basic navigation placeholders, and documented development commands. Do not implement weather fetching or storage yet.
+```text
+http://<raspberry-pi-ip>:5173/
+```
 
-### PR 2 — PWA baseline
+For example, if `hostname -I` shows `192.168.1.42`, open:
 
-Add a web app manifest, icons/placeholders as needed, installability metadata, and a conservative service worker strategy. Cache static app-shell assets only. Do not cache weather API responses or personal log data.
+```text
+http://192.168.1.42:5173/
+```
 
-### PR 3 — Local IndexedDB data layer
+### Confirm the manifest
 
-Add simple, documented local data types and an IndexedDB wrapper for personal logs. Include export/import before risky storage changes and call out backup risk in the PR summary.
+1. Open the app in Chrome or Edge.
+2. Open DevTools → Application → Manifest.
+3. Confirm the app name is `MwenWeather`.
+4. Confirm display mode is `standalone`.
+5. Confirm the icon entry loads from `/icons/icon.svg`.
 
-### PR 4 — Current weather screen
+You can also open this URL directly:
 
-Add a current weather screen using a browser-safe weather provider. Keep secrets out of Git. Prefer providers that do not require a private server-side key for v1.
+```text
+http://<raspberry-pi-ip>:5173/manifest.webmanifest
+```
 
-### PR 5 — New log form with permanent weather snapshot
+### Test saving a log
 
-Add the form for logging how the weather felt, what was worn, and what the user wishes they had worn or brought. Store a permanent weather snapshot inside each log entry so future recommendations do not depend on mutable API data.
+1. Open the Weather tab.
+2. Tap **Log what this feels like**.
+3. Fill in what you wore, how it felt, comfort level, and optional notes.
+4. Tap **Save local log**.
+5. Confirm the History tab shows the new log with the saved weather snapshot.
+6. Refresh the page and confirm the log is still present.
 
-### PR 6 — History screen
+### Test export/import data
 
-Add a history screen for browsing personal logs. Prioritize readable summaries, mobile tap targets, and simple filtering/sorting before advanced search.
+1. Open the **Data** tab.
+2. Tap **Export JSON backup** and save the downloaded file.
+3. To test import, use another browser profile/device or clear this site's local data after confirming you have the backup.
+4. Open the **Data** tab again.
+5. Tap **Import JSON backup** and select the exported file.
+6. Confirm the History tab shows the imported logs.
 
-### PR 7 — Simple explainable recommendations
+## Acceptance tests
 
-Add recommendation logic based on past logs. Recommendations must be explainable by showing which past logs or patterns influenced the suggestion.
+Run:
 
-### PR 8 — UI polish + Android/PWA testing
+```bash
+npm test
+```
 
-Polish the mobile UI, verify installability and offline behavior, and manually test on Android/PWA flows where possible.
-
-## How to run the project
-
-The project is not runnable yet because the app scaffold has not been created. After PR 1, this section should be updated with the actual package manager and commands, such as install, development server, lint, test, and build commands.
-
-For now, there are no configured project commands.
-
-## Manual testing expectations
-
-Every PR should include manual acceptance tests in the PR summary. For this planning PR, manual acceptance is documentation-focused:
-
-- Confirm `README.md` describes the app concept and current repo state.
-- Confirm the roadmap is phased and does not implement the MVP yet.
-- Confirm `AGENTS.md` captures the project constraints and data-safety rules.
-- Confirm no app scaffold, backend, auth, cloud sync, Docker setup, or database server was added.
-
-Future implementation PRs should include both command-based checks and human acceptance tests. For UI changes, test mobile viewport behavior and avoid hover-only interactions.
-
-## Known risks and limitations
-
-- There is no runnable app yet.
-- No package manager or dependency policy has been selected through generated files yet.
-- Weather provider choice is still open; v1 should prefer a browser-safe provider that does not require committing real API keys.
-- IndexedDB schema details are not designed yet.
-- Export/import must be added before any risky storage migrations.
-- PWA caching must remain conservative to avoid caching weather API responses or personal log data.
+The tests verify that the manifest uses the correct app name and standalone display, and that the service worker cache list remains limited to app shell assets while ignoring non-GET and cross-origin requests.
