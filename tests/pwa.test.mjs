@@ -22,3 +22,11 @@ test('service worker does not intercept non-GET or cross-origin requests', () =>
   assert.match(serviceWorker, /request\.method !== 'GET'/);
   assert.match(serviceWorker, /url\.origin !== self\.location\.origin/);
 });
+
+test('log ID helper falls back when randomUUID is unavailable and does not call itself', () => {
+  const helper = readFileSync('src/logIds.ts', 'utf8');
+  assert.match(helper, /globalThis\.crypto\?\.randomUUID/);
+  assert.match(helper, /randomUUID\.call\(globalThis\.crypto\)/);
+  assert.match(helper, /log-\$\{Date\.now\(\)\}-\$\{Math\.random\(\)\.toString\(36\)\.slice\(2, 10\)\}/);
+  assert.equal((helper.match(/createLogId\(/g) ?? []).length, 1);
+});

@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { createLogId } from './logIds';
 import { getRecommendation } from './recommendations';
 import { buildExport, getLogs, parseExport, replaceLogs, saveLog } from './storage';
 import type { WeatherLog, WeatherSnapshot } from './types';
@@ -84,7 +85,7 @@ function App() {
     if (!weather) return;
 
     const log: WeatherLog = {
-      id: crypto.randomUUID(),
+      id: createLogId(),
       createdAt: new Date().toISOString(),
       weather,
       outfit: form.outfit,
